@@ -19,13 +19,8 @@ class BigCartel {
 	private $_subdomain;
 	
 	 /**
-     * Returns the contents of the remote file or an empty string.
-     * 
-     * If the connection to the remote server failed, the $_remoteFile
-     * property is a Boolean false, so must be converted to an empty
-     * string for the __toString() magic method to work.
-     *
-     * @return string Contents of the remote file on success, or a blank string on failure.
+     * Constructor - pass the subdomain of your store
+     * @return void
      */
 	public function __construct($subdomain){
 		$this->setSubdomain($subdomain);
@@ -33,20 +28,19 @@ class BigCartel {
 	
 	
 	 /**
-     * Returns the contents of the remote file or an empty string.
-     * 
-     * If the connection to the remote server failed, the $_remoteFile
-     * property is a Boolean false, so must be converted to an empty
-     * string for the __toString() magic method to work.
-     *
-     * @return string Contents of the remote file on success, or a blank string on failure.
+     * Setter method, sets the private subdomain property
+     * @return void
      */
 	public function setSubdomain($subdomain){
 		$this->_subdomain = self::API_URL_PREFIX . $subdomain;
 	}
 	
 	
-	
+	/**
+     * Retrieves the stores information in JSON and decodes 
+     * it into a StdClass object
+     * @return StdClass
+     */
 	public function storeInformation(){
 		$url = $this->_subdomain . '/' . self::API_URL_STORE . '.js?callBack=showStore';
 		$stream = new RemoteConnector($url);
@@ -55,13 +49,11 @@ class BigCartel {
 	
 	
 	 /**
-     * Returns the contents of the remote file or an empty string.
-     * 
-     * If the connection to the remote server failed, the $_remoteFile
-     * property is a Boolean false, so must be converted to an empty
-     * string for the __toString() magic method to work.
-     *
-     * @return string Contents of the remote file on success, or a blank string on failure.
+     * Returns all products in the store's product library. We can
+     * limit how many products are returned by passing a numeric limit 
+     * parameter.
+     * @param int $limit - a number of products you wish to return
+     * @return StdClass
      */	
 	public function getProducts($limit = 1000){
 		$url = $this->_subdomain . '/' . self::API_URL_PRODUCTS . '.js?limit=' . (int)$limit;		// we'll deal with JSON only
@@ -71,13 +63,9 @@ class BigCartel {
 	
 	
 	 /**
-     * Returns the contents of the remote file or an empty string.
-     * 
-     * If the connection to the remote server failed, the $_remoteFile
-     * property is a Boolean false, so must be converted to an empty
-     * string for the __toString() magic method to work.
-     *
-     * @return string Contents of the remote file on success, or a blank string on failure.
+     * Returns a single product object identified by it's id field
+     * @param int $id - the product's ID
+     * @return StdClass
      */
 	public function getProduct($id){
 		$all = $this->getProducts();
@@ -92,13 +80,9 @@ class BigCartel {
 	
 	
 	 /**
-     * Returns the contents of the remote file or an empty string.
-     * 
-     * If the connection to the remote server failed, the $_remoteFile
-     * property is a Boolean false, so must be converted to an empty
-     * string for the __toString() magic method to work.
-     *
-     * @return string Contents of the remote file on success, or a blank string on failure.
+     * Returns a set of products in a particular category
+     * @param string $category - the category of products we wish to return, e.g. 'music'
+     * @return array
      */
 	public function getProductsInCategory($category){
 		$products = array();
@@ -125,7 +109,12 @@ class BigCartel {
 	}
 	
 	
-	
+	 /**
+     * Returns a single image from a product object
+     * @param string $product_object - the product object of whose images we should search through
+     * @param string $filename - the filename of the image you wish to return
+     * @return StdClass
+     */
 	public function getImage($product_object, $filename){
 		$images = $product_object->images;
 		if($images){
@@ -141,13 +130,11 @@ class BigCartel {
 	
 	
 	 /**
-     * Returns the contents of the remote file or an empty string.
-     * 
-     * If the connection to the remote server failed, the $_remoteFile
-     * property is a Boolean false, so must be converted to an empty
-     * string for the __toString() magic method to work.
-     *
-     * @return string Contents of the remote file on success, or a blank string on failure.
+     * A product object could have more than one category. This method looks 
+     * retrieves all of $product's categories and returns an array of their
+     * permalinks.
+     * @param StdClass $product - the product whose categories we wish to return
+     * @return array
      */
 	static private function getProductCategories($product){
 		$categories = array();
@@ -163,7 +150,7 @@ class BigCartel {
 }
 
 
-
+// ----------------------------------- End of BigCartel -----------------------------------
 
 
 
