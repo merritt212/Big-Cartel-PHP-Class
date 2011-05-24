@@ -1,0 +1,3 @@
+A class for hooking into Big Cartel's API and retrieving full product information. You can select all products, a single product or products from one or many categories. 
+
+Class file is documented, it's pretty self explanitory! See http://garethpoole.co.uk/php/big-cartel-rest-api/ for usage examples.
